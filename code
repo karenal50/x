@@ -1,0 +1,68 @@
+#include <iostream>
+using namespace std;
+
+// Lógica de conteo (Composición)
+class OneCounter {
+public:
+    int contarUnos(const string& s) {
+        int n = s.size();
+        int originalUnos = 0;
+        for (char c : s) {
+            if (c == '1') originalUnos++;
+        }
+        return originalUnos * (n - 1) + (n - originalUnos);
+    }
+};
+
+// Clase base con herencia
+class TestCase {
+public:
+    virtual int resolver() {
+        return 0;
+    }
+    virtual ~TestCase() {}
+};
+
+// Caso específico del Dr. TC (Hereda de TestCase)
+class DrTCTestCase : public TestCase {
+private:
+    int n;
+    string s;
+    OneCounter contador;
+
+public:
+    DrTCTestCase(int n, string s) {
+        this->n = n;
+        this->s = s;
+    }
+
+    int resolver() override {
+        return contador.contarUnos(s);
+    }
+};
+
+int main() {
+    const int MAX = 1000; // máximo número de casos
+    int t;
+    cin >> t;
+
+    TestCase* casos[MAX]; // arreglo de punteros a TestCase
+
+    for (int i = 0; i < t; i++) {
+        int n;
+        string s;
+        cin >> n >> s;
+        casos[i] = new DrTCTestCase(n, s);
+    }
+
+    for (int i = 0; i < t; i++) {
+        cout << casos[i]->resolver() << endl;
+    }
+
+    // Liberar memoria
+    for (int i = 0; i < t; i++) {
+        delete casos[i];
+    }
+
+    return 0;
+}
